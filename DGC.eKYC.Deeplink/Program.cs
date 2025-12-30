@@ -1,19 +1,9 @@
-using DGC.eKYC.Deeplink.Middlewares;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Builder;
-using Microsoft.Azure.Functions.Worker.Middleware;
-using Microsoft.Extensions.DependencyInjection;
+using DGC.eKYC.Deeplink.Extension;
 using Microsoft.Extensions.Hosting;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureAppConfiguration(EnvConfigExtension.Default);
+hostBuilder.ConfigureFunctionsWebApplication(HostBuilderExtension.AddDefault);
+hostBuilder.ConfigureServices(ServicesExtension.AddDefault);
 
-//builder.ConfigureFunctionsWebApplication();
-
-// Register your middleware here
-builder.Services.AddSingleton<IFunctionsWorkerMiddleware, ApiVersionMiddleware>();
-
-builder.Services
-    .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
-
-builder.Build().Run();
+hostBuilder.Build().Run();
