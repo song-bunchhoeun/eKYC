@@ -4,6 +4,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
+      "hotReloadEnabled": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -14,6 +15,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
+      "hotReloadEnabled": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -23,6 +25,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "hotReloadEnabled": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -31,6 +34,7 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
+      "hotReloadEnabled": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
