@@ -13,8 +13,6 @@ public partial class OcrNid
 
     public string IdNumber { get; set; }
 
-    public string Side { get; set; }
-
     public string ProfileType { get; set; }
 
     public string NameKh { get; set; }

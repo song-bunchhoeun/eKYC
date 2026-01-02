@@ -35,10 +35,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Client]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[DeepLinkRequest]",
          "ObjectType": 0
       },
@@ -79,11 +75,23 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[OrgChannel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrgDGConnectClient]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Permission]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[PoTProfileMatching]",
+         "Name": "[dbo].[PoTCheckExistingNid]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PoTCompareFaceExistingNid]",
          "ObjectType": 0
       },
       {

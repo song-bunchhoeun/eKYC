@@ -22,8 +22,6 @@ public partial class EKycContext : DbContext
 
     public virtual DbSet<BillTransactionDetail> BillTransactionDetails { get; set; }
 
-    public virtual DbSet<Client> Clients { get; set; }
-
     public virtual DbSet<DeepLinkRequest> DeepLinkRequests { get; set; }
 
     public virtual DbSet<DocumentType> DocumentTypes { get; set; }
@@ -42,11 +40,17 @@ public partial class EKycContext : DbContext
 
     public virtual DbSet<OcrPassport> OcrPassports { get; set; }
 
+    public virtual DbSet<OrgChannel> OrgChannels { get; set; }
+
+    public virtual DbSet<OrgDgconnectClient> OrgDgconnectClients { get; set; }
+
     public virtual DbSet<Organization> Organizations { get; set; }
 
     public virtual DbSet<Permission> Permissions { get; set; }
 
-    public virtual DbSet<PoTprofileMatching> PoTprofileMatchings { get; set; }
+    public virtual DbSet<PoTcheckExistingNid> PoTcheckExistingNids { get; set; }
+
+    public virtual DbSet<PoTcompareFaceExistingNid> PoTcompareFaceExistingNids { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
@@ -65,6 +69,8 @@ public partial class EKycContext : DbContext
         modelBuilder.Entity<AuditLog>(entity =>
         {
             entity.ToTable("AuditLog");
+
+            entity.HasIndex(e => new { e.DeepLinkRequestId, e.Timestamp }, "IX_AuditLog_DeepLinkRequestId_Timestamp");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Action).HasMaxLength(100);
@@ -140,43 +146,48 @@ public partial class EKycContext : DbContext
                 .HasConstraintName("FK_BillTransactionDetail_BillTransaction");
         });
 
-        modelBuilder.Entity<Client>(entity =>
-        {
-            entity.ToTable("Client");
-
-            entity.Property(e => e.ClientName)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getutcdate())")
-                .HasAnnotation("Relational:DefaultConstraintName", "DF_Client_CreatedAt");
-
-            entity.HasOne(d => d.Org).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.OrgId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_Organization");
-        });
-
         modelBuilder.Entity<DeepLinkRequest>(entity =>
         {
             entity.ToTable("DeepLinkRequest");
 
+            entity.HasIndex(e => new { e.CreatedAt, e.OrgId }, "IX_DeepLinkRequest_CreatedAt_OrgId");
+
             entity.HasIndex(e => new { e.DealerId, e.IsUsed, e.CreatedAt }, "IX_DeepLinkRequest_DealerId_IsUsed_RequestedAt");
 
+            entity.HasIndex(e => e.PhoneNumber, "IX_DeepLinkRequest_PhoneNumber").HasFilter("([PhoneNumber] IS NOT NULL)");
+
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.ClientIpAddress).HasMaxLength(50);
+            entity.Property(e => e.CallBackUrl)
+                .IsRequired()
+                .HasMaxLength(512);
+            entity.Property(e => e.ChannelName)
+                .IsRequired()
+                .HasMaxLength(64);
+            entity.Property(e => e.ClientIpAddress).HasMaxLength(64);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_DeepLinkRequest_RequestedAt");
-            entity.Property(e => e.DealerId).HasMaxLength(100);
-            entity.Property(e => e.IsUsed)
-                .HasDefaultValue(false)
-                .HasAnnotation("Relational:DefaultConstraintName", "DF_DeepLinkRequest_IsUsed");
-            entity.Property(e => e.PlatformType).HasMaxLength(50);
+            entity.Property(e => e.DealerId)
+                .IsRequired()
+                .HasMaxLength(64);
+            entity.Property(e => e.DealerName)
+                .IsRequired()
+                .HasMaxLength(128);
+            entity.Property(e => e.IsUsed).HasAnnotation("Relational:DefaultConstraintName", "DF_DeepLinkRequest_IsUsed");
+            entity.Property(e => e.PhoneNumber)
+                .IsRequired()
+                .HasMaxLength(20);
+            entity.Property(e => e.UserAgent).HasMaxLength(512);
 
             entity.HasOne(d => d.Org).WithMany(p => p.DeepLinkRequests)
                 .HasForeignKey(d => d.OrgId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DeepLinkRequest_Organization");
+
+            entity.HasOne(d => d.OrgChannel).WithMany(p => p.DeepLinkRequests)
+                .HasForeignKey(d => new { d.ChannelName, d.OrgId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DeepLinkRequest_OrgChannel");
         });
 
         modelBuilder.Entity<DocumentType>(entity =>
@@ -201,11 +212,9 @@ public partial class EKycContext : DbContext
         {
             entity.ToTable("EkycTransaction");
 
-            entity.HasIndex(e => e.CreatedAt, "IX_EkycTransaction_CreatedAt");
+            entity.HasIndex(e => new { e.CreatedAt, e.OrgId }, "IX_EkycTransaction_CreatedAt_OrgId");
 
-            entity.HasIndex(e => e.DeeplinkRequestId, "IX_EkycTransaction_DeeplnkRequestId");
-
-            entity.HasIndex(e => new { e.OrgId, e.ClientId, e.CreatedAt }, "IX_EkycTransaction_OrgId_ClientId_CreatedAt");
+            entity.HasIndex(e => e.DeeplinkRequestId, "IX_EkycTransaction_DeeplinkRequestId").IsUnique();
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedAt)
@@ -216,16 +225,10 @@ public partial class EKycContext : DbContext
             entity.Property(e => e.EkycOption)
                 .IsRequired()
                 .HasMaxLength(20);
-            entity.Property(e => e.IsDelete).HasAnnotation("Relational:DefaultConstraintName", "DF_EkycTransaction_IsDelete");
             entity.Property(e => e.OsType).HasMaxLength(255);
 
-            entity.HasOne(d => d.Client).WithMany(p => p.EkycTransactions)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EkycTransaction_Client");
-
-            entity.HasOne(d => d.DeeplinkRequest).WithMany(p => p.EkycTransactions)
-                .HasForeignKey(d => d.DeeplinkRequestId)
+            entity.HasOne(d => d.DeeplinkRequest).WithOne(p => p.EkycTransaction)
+                .HasForeignKey<EkycTransaction>(d => d.DeeplinkRequestId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EkycTransaction_DeepLinkRequest");
 
@@ -318,6 +321,8 @@ public partial class EKycContext : DbContext
 
             entity.ToTable("OcrNid");
 
+            entity.HasIndex(e => e.IdNumber, "IX_OcrNid_IdNumber");
+
             entity.Property(e => e.BirthDate).HasMaxLength(255);
             entity.Property(e => e.BirthPlace).HasMaxLength(255);
             entity.Property(e => e.CreatedAt)
@@ -334,7 +339,6 @@ public partial class EKycContext : DbContext
                 .IsRequired()
                 .HasMaxLength(10);
             entity.Property(e => e.Sex).HasMaxLength(25);
-            entity.Property(e => e.Side).HasMaxLength(255);
         });
 
         modelBuilder.Entity<OcrPassport>(entity =>
@@ -342,6 +346,8 @@ public partial class EKycContext : DbContext
             entity.HasKey(e => new { e.EkycTransactionId, e.EkycTransactionDetailId });
 
             entity.ToTable("OcrPassport");
+
+            entity.HasIndex(e => e.PassportNumber, "IX_OcrPassport_PassportNumber");
 
             entity.Property(e => e.Confidence).HasMaxLength(255);
             entity.Property(e => e.CountryCode).HasMaxLength(255);
@@ -359,6 +365,44 @@ public partial class EKycContext : DbContext
                 .HasForeignKey<OcrPassport>(d => new { d.EkycTransactionId, d.EkycTransactionDetailId })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OcrPassport_EkycTransactionDetail");
+        });
+
+        modelBuilder.Entity<OrgChannel>(entity =>
+        {
+            entity.HasKey(e => new { e.ChannelName, e.OrgId });
+
+            entity.ToTable("OrgChannel");
+
+            entity.HasIndex(e => e.OrgId, "IX_OrgChannel_OrgId");
+
+            entity.Property(e => e.ChannelName).HasMaxLength(64);
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_OrgChannel_CreatedDate");
+
+            entity.HasOne(d => d.Org).WithMany(p => p.OrgChannels)
+                .HasForeignKey(d => d.OrgId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrgChannel_Organization");
+        });
+
+        modelBuilder.Entity<OrgDgconnectClient>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Client");
+
+            entity.ToTable("OrgDGConnectClient");
+
+            entity.Property(e => e.ClientName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_Client_CreatedAt");
+
+            entity.HasOne(d => d.Org).WithMany(p => p.OrgDgconnectClients)
+                .HasForeignKey(d => d.OrgId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Client_Organization");
         });
 
         modelBuilder.Entity<Organization>(entity =>
@@ -394,20 +438,45 @@ public partial class EKycContext : DbContext
                 .HasMaxLength(255);
         });
 
-        modelBuilder.Entity<PoTprofileMatching>(entity =>
+        modelBuilder.Entity<PoTcheckExistingNid>(entity =>
         {
-            entity.HasKey(e => new { e.EkycTransactionId, e.EkycTransactionDetailId });
+            entity.HasKey(e => new { e.EkycTransactionId, e.EkycTransactionDetailId }).HasName("PK_PoTProfileMatching");
 
-            entity.ToTable("PoTProfileMatching");
+            entity.ToTable("PoTCheckExistingNid");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_PoTProfileMatching_CreatedAt");
+            entity.Property(e => e.SessionToken).HasMaxLength(64);
 
-            entity.HasOne(d => d.EkycTransactionDetail).WithOne(p => p.PoTprofileMatching)
-                .HasForeignKey<PoTprofileMatching>(d => new { d.EkycTransactionId, d.EkycTransactionDetailId })
+            entity.HasOne(d => d.EkycTransactionDetail).WithOne(p => p.PoTcheckExistingNid)
+                .HasForeignKey<PoTcheckExistingNid>(d => new { d.EkycTransactionId, d.EkycTransactionDetailId })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PoTProfileMatching_EkycTransactionDetail");
+        });
+
+        modelBuilder.Entity<PoTcompareFaceExistingNid>(entity =>
+        {
+            entity.HasKey(e => new { e.EkycTransactionId, e.EkycTransactionDetailId });
+
+            entity.ToTable("PoTCompareFaceExistingNid");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_PoTCompareFaceExistingNid_CreatedAt");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.NameEn).HasMaxLength(128);
+            entity.Property(e => e.NameKh).HasMaxLength(128);
+            entity.Property(e => e.NidImageUrl).HasMaxLength(128);
+            entity.Property(e => e.NidNumber).HasMaxLength(20);
+
+            entity.HasOne(d => d.EkycTransactionDetail).WithOne(p => p.PoTcompareFaceExistingNid)
+                .HasForeignKey<PoTcompareFaceExistingNid>(d => new { d.EkycTransactionId, d.EkycTransactionDetailId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PoTCompareFaceExistingNid_EkycTransactionDetail");
         });
 
         modelBuilder.Entity<Role>(entity =>

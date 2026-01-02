@@ -11,8 +11,6 @@ public partial class EkycTransaction
 
     public int OrgId { get; set; }
 
-    public int ClientId { get; set; }
-
     public int? DealerId { get; set; }
 
     public string OsType { get; set; }
@@ -27,11 +25,11 @@ public partial class EkycTransaction
 
     public Guid DeeplinkRequestId { get; set; }
 
+    public DateTime? CompletedAt { get; set; }
+
+    public DateTime? RetrievedAt { get; set; }
+
     public DateTime CreatedAt { get; set; }
-
-    public bool IsDelete { get; set; }
-
-    public virtual Client Client { get; set; }
 
     public virtual DeepLinkRequest DeeplinkRequest { get; set; }
 

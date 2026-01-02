@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DGC.eKYC.Dal.Models;
 
-public partial class Client
+public partial class OrgDgconnectClient
 {
     public int Id { get; set; }
 
@@ -18,8 +18,6 @@ public partial class Client
     public DateTime? UpdatedAt { get; set; }
 
     public DateTime? DeletedAt { get; set; }
-
-    public virtual ICollection<EkycTransaction> EkycTransactions { get; set; } = new List<EkycTransaction>();
 
     public virtual Organization Org { get; set; }
 }

@@ -31,5 +31,7 @@ public partial class EkycTransactionDetail
 
     public virtual OcrPassport OcrPassport { get; set; }
 
-    public virtual PoTprofileMatching PoTprofileMatching { get; set; }
+    public virtual PoTcheckExistingNid PoTcheckExistingNid { get; set; }
+
+    public virtual PoTcompareFaceExistingNid PoTcompareFaceExistingNid { get; set; }
 }

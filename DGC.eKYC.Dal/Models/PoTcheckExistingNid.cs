@@ -5,13 +5,17 @@ using System.Collections.Generic;
 
 namespace DGC.eKYC.Dal.Models;
 
-public partial class PoTprofileMatching
+public partial class PoTcheckExistingNid
 {
     public Guid EkycTransactionId { get; set; }
 
     public Guid EkycTransactionDetailId { get; set; }
 
-    public bool IsVerified { get; set; }
+    public bool IsExist { get; set; }
+
+    public Guid? TrackingId { get; set; }
+
+    public string SessionToken { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

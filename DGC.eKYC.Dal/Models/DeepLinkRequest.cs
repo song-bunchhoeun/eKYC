@@ -9,7 +9,7 @@ public partial class DeepLinkRequest
 {
     public Guid Id { get; set; }
 
-    public int? OrgId { get; set; }
+    public int OrgId { get; set; }
 
     public string DealerId { get; set; }
 
@@ -19,9 +19,9 @@ public partial class DeepLinkRequest
 
     public string CallBackUrl { get; set; }
 
-    public string PlatformType { get; set; }
+    public string ChannelName { get; set; }
 
-    public bool? IsUsed { get; set; }
+    public bool IsUsed { get; set; }
 
     public DateTime? UsedAt { get; set; }
 
@@ -33,7 +33,9 @@ public partial class DeepLinkRequest
 
     public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
 
-    public virtual ICollection<EkycTransaction> EkycTransactions { get; set; } = new List<EkycTransaction>();
+    public virtual EkycTransaction EkycTransaction { get; set; }
 
     public virtual Organization Org { get; set; }
+
+    public virtual OrgChannel OrgChannel { get; set; }
 }

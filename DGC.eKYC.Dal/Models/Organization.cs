@@ -35,11 +35,13 @@ public partial class Organization
 
     public virtual ICollection<BillTransaction> BillTransactions { get; set; } = new List<BillTransaction>();
 
-    public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
-
     public virtual ICollection<DeepLinkRequest> DeepLinkRequests { get; set; } = new List<DeepLinkRequest>();
 
     public virtual ICollection<EkycTransaction> EkycTransactions { get; set; } = new List<EkycTransaction>();
+
+    public virtual ICollection<OrgChannel> OrgChannels { get; set; } = new List<OrgChannel>();
+
+    public virtual ICollection<OrgDgconnectClient> OrgDgconnectClients { get; set; } = new List<OrgDgconnectClient>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
