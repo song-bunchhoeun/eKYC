@@ -12,4 +12,12 @@ public partial class Mapper
         input.DealerName = input.DealerName?.Trim();
         input.PhoneNumber = input.PhoneNumber.ToMsIsdnCleaned();
     }
+
+    public static void ToCleaned(this ValidateDeeplinkInputDto input)
+    {
+        input.CallBackUrl = input.CallBackUrl.Trim();
+        input.DealerId = input.DealerId.Trim();
+        input.PhoneNumber = input.PhoneNumber.ToMsIsdnCleaned();
+        input.DeeplinkRequestId = input.DeeplinkRequestId.Trim();
+    }
 }

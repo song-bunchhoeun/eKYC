@@ -34,7 +34,7 @@ public class SuperAppHashValidation : ActionFilterAttribute
                 hashCompute.PopulateSecurityField(securityInput, securityInput.InitData);
                 hashCompute.ValidateSecurityFieldInput(securityInput);
 
-                var initDataExpirationSecond = configuration.GetValue<int>("ApiKeyExpiration", 10);
+                var initDataExpirationSecond = configuration.GetValue<int>("SuperAppSettings:ApiKeyExpirationSeconds", 10);
                 var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 var createdTime = epoch.AddSeconds(securityInput.TimeStamp ?? 0d);
                 var now = DateTime.UtcNow;

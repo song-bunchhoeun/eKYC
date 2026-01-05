@@ -34,4 +34,29 @@ public partial class Mapper
 
         return deeplinkEntity;
     }
+
+
+    public static EkycTransaction ToEkycTransactionEntity(
+        this DeepLinkRequest input, 
+        ValidateDeeplinkInputDto apiInputDto, 
+        string? eKycOption,
+        Guid id,
+        DateTime now)
+    {
+        var deeplinkEntity = new EkycTransaction
+        {
+            Id = id,
+            OrgId = input.OrgId,
+            DealerId = input.DealerId,
+            OsType = apiInputDto.Os,
+            SuperAppDeviceId = apiInputDto.DeviceId,
+            SuperAppUserId = apiInputDto.UserId,
+            DeviceOsVersion = apiInputDto.OsVersion,
+            EkycOption = eKycOption,
+            DocumentTypeId = 0, // To be set later
+            CreatedAt = now
+        };
+
+        return deeplinkEntity;
+    }
 }

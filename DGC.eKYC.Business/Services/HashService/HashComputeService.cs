@@ -10,7 +10,7 @@ namespace DGC.eKYC.Business.Services.HashService;
 
 public class HashComputeService(IConfiguration configuration, IServiceProvider serviceProvider) : IHashCompute
 {
-    private readonly string _superAppSecretKey = configuration.GetSection("Encryption:SuperAppHashKey").Get<string>() 
+    private readonly string _superAppSecretKey = configuration.GetSection("SuperAppSettings:HashKey").Get<string>() 
                                                  ?? throw new ArgumentException("MissingSuperAppKey");
 
     private readonly IServiceProvider _serviceProvider = serviceProvider;

@@ -29,4 +29,16 @@ public class SuperAppSecurityBaseFormattedInput
 
     [JsonIgnore]
     public double? TimeStamp { get; set; }
+
+    [JsonIgnore]
+    public string? Os { get; set; }
+
+    [JsonIgnore]
+    public string? UserAgent { get; set; }
+
+    [JsonIgnore]
+    public string? IpAddress { get; set; }
+
+    [JsonIgnore] 
+    public string? OsVersion { get; set; }
 }

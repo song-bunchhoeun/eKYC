@@ -5,9 +5,10 @@ namespace DGC.eKYC.Business.Mapper;
 public partial class Mapper
 {
     public static Dictionary<string, string?> ToParamDictionary(
-        this GenerateDeeplinkInputDto input, 
-        string eKycMiniAppId, 
-        string unixTimestampStr, 
+        this GenerateDeeplinkInputDto input,
+        string eKycMiniAppId,
+        string unixTimestampStr,
+        string deeplinkRequestId,
         int orgId)
     {
         var queryParams = new Dictionary<string, string?>
@@ -19,7 +20,8 @@ public partial class Mapper
             { "dealerId", input.DealerId },
             { "orgId", orgId.ToString() },
             { "phoneNumber", input.PhoneNumber },
-            { "channelName", input.ChannelName }
+            { "channelName", input.ChannelName },
+            { "deeplinkId", deeplinkRequestId}
         };
 
         return queryParams;

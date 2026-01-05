@@ -11,11 +11,11 @@ public class ApiJwtService(IConfiguration config) : IJwtService
 {
     // Pre-calculate the key object for maximum efficiency in a Singleton
     private readonly SymmetricSecurityKey _signingKey = new(
-        Encoding.ASCII.GetBytes(config.GetValue<string>("Jwt:SecretKey")
-                                ?? throw new InvalidOperationException("JWT Secret Key is not configured.")));
+        Encoding.UTF8.GetBytes(config.GetValue<string>("JwtSettings:SecretKey")
+                               ?? throw new InvalidOperationException("JWT Secret Key is not configured.")));
 
-    private readonly string _issuer = config.GetValue<string>("Jwt:Issuer") ?? "DefaultIssuer";
-    private readonly string _audience = config.GetValue<string>("Jwt:Audience") ?? "DefaultAudience";
+    private readonly string _issuer = config.GetValue<string>("JwtSettings:Issuer") ?? "DefaultIssuer";
+    private readonly string _audience = config.GetValue<string>("JwtSettings:Audience") ?? "DefaultAudience";
 
     public string GenerateToken(string subject, int expiryMinutes, Dictionary<string, string?> additionalClaims)
     {

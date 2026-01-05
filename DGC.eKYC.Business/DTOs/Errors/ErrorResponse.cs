@@ -9,7 +9,7 @@ public class ErrorResponse(string code, string? message, List<ErrorDetail>? deta
     public ErrorDetail Error { get; set; } = new ErrorDetail(code, message, details);
 }
 
-public class ErrorDetail(string code, string? message, List<ErrorDetail>? details)
+public class ErrorDetail(string code, string? message, List<ErrorDetail>? details = null)
 {
     [Required]
     public string Code { get; set; } = code;

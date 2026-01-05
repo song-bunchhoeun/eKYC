@@ -5,9 +5,11 @@ namespace DGC.eKYC.Business.Services.Deeplink;
 public interface IDeeplinkService
 {
     Task<GenerateDeeplinkOutputDto> GenerateDeeplink(
-        GenerateDeeplinkInputDto generateDeeplinkInputDto, 
+        GenerateDeeplinkInputDto generateDeeplinkInputInputDto, 
         string mnoDgConnectClientId, 
         CancellationToken cancellationToken);
 
-
+    Task<ValidateDeeplinkOutputDto> ValidateDeeplink(
+        ValidateDeeplinkInputDto validateDeeplinkDto,
+        CancellationToken cancellationToken);
 }

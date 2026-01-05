@@ -41,6 +41,7 @@ public class ExceptionHelperMiddleware(
         }
         catch (Exception ex)
         {
+            httpCtx.Response.StatusCode = 500;
             var environment = _configuration["ASPNETCORE_ENVIRONMENT"];
             if (!string.Equals(environment, "Production", StringComparison.OrdinalIgnoreCase))
             {

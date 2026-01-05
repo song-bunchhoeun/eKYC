@@ -15,7 +15,7 @@ public partial class CallBackUrlValidationAttribute : ValidationAttribute
     {
         try
         {
-            if (callbackUrl is not string url || string.IsNullOrWhiteSpace(url))
+            if (callbackUrl is not string url || string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(callbackUrl), "Url is not the correct data type for callback URI");
 
             if (url.Length > 512) // Common maximum URL length
