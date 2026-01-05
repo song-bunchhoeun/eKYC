@@ -262,11 +262,6 @@ public partial class EKycContext : DbContext
                 .HasForeignKey(d => d.EkycTransactionTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EkycTransactionDetail_EkycTransactionType");
-
-            entity.HasOne(d => d.OcrNid).WithOne(p => p.EkycTransactionDetail)
-                .HasForeignKey<EkycTransactionDetail>(d => new { d.EkycTransactionId, d.Id })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EkycTransactionDetail_OcrNid");
         });
 
         modelBuilder.Entity<EkycTransactionType>(entity =>
@@ -341,6 +336,11 @@ public partial class EKycContext : DbContext
                 .IsRequired()
                 .HasMaxLength(10);
             entity.Property(e => e.Sex).HasMaxLength(25);
+
+            entity.HasOne(d => d.EkycTransactionDetail).WithOne(p => p.OcrNid)
+                .HasForeignKey<OcrNid>(d => new { d.EkycTransactionId, d.EkycTransactionDetailId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OcrNid_EkycTransactionDetail");
         });
 
         modelBuilder.Entity<OcrPassport>(entity =>
