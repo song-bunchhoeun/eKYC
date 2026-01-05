@@ -35,10 +35,10 @@ public class DeeplinkController(
 
     private async Task<IActionResult> ProcessDeeplinkRequestAsync(
         HttpRequest req, 
-        GenerateDeeplinkInputDto generateDeeplinkInputDto, 
+        GenerateDeeplinkInputDto generateDeeplinkInputInputDto, 
         CancellationToken cancellationToken)
     {
-        generateDeeplinkInputDto.ToCleaned();
+        generateDeeplinkInputInputDto.ToCleaned();
 
         var authTokenAvailable = req.Headers.TryGetValue("Authorization", out var authToken);
         if (!authTokenAvailable)
@@ -52,7 +52,7 @@ public class DeeplinkController(
                 new ErrorResponse("malformed_token", "Authorize Token is malformed!"));
 
         var response = 
-            await _deeplinkService.GenerateDeeplink(generateDeeplinkInputDto, mnoDgConnectClientId, cancellationToken);
+            await _deeplinkService.GenerateDeeplink(generateDeeplinkInputInputDto, mnoDgConnectClientId, cancellationToken);
 
         return new OkObjectResult(response);
     }
