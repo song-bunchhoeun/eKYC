@@ -18,7 +18,7 @@ public partial class Mapper
             { "name", actionName },
             { "host", host },
             { "miniappid", eKycMiniAppId },
-            { "timestamp", unixTimestampStr },
+            { "createdAt", unixTimestampStr },
             { "callbackUrl", input.CallBackUrl },
             { "dealerId", input.DealerId },
             { "orgId", orgId.ToString() },

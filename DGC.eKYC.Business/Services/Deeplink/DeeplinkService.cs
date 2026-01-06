@@ -101,11 +101,11 @@ public class DeeplinkService(
             if (validateDeeplinkDto.OrgId != cacheDto.OrgId)
                 throw new CustomHttpResponseException(403, new ErrorResponse("forbidden_org_id", "this orgId is not valid!"));
 
-            if (validateDeeplinkDto.Timestamp != cacheDto.Timestamp)
+            if (validateDeeplinkDto.CreatedAt != cacheDto.CreatedAt)
                 throw new CustomHttpResponseException(403, new ErrorResponse("forbidden_timestamp", "this Timestamp is not valid!"));
 
             var deeplinkExpiration = _configuration.GetValue<int>("EKycSettings:DeeplinkExpirationSeconds");
-            var originalTimestamp = DateTimeOffset.FromUnixTimeSeconds(cacheDto.Timestamp);
+            var originalTimestamp = DateTimeOffset.FromUnixTimeSeconds(cacheDto.CreatedAt);
             var nowTime = DateTimeOffset.UtcNow;
             var elapsedSeconds = (nowTime - originalTimestamp).TotalSeconds;
             if (elapsedSeconds > deeplinkExpiration)

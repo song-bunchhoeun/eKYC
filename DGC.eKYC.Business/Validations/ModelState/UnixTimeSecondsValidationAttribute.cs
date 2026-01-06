@@ -14,11 +14,9 @@ public sealed class UnixTimeSecondsValidationAttribute : ValidationAttribute
             if (timestamp is not long unix)
                 throw new ArgumentNullException(nameof(timestamp), "Timestamp is not the correct data type for UNIX Timestamp");
 
-            return unix is >= 0 and <= MaxUnixSeconds
-                ? ValidationResult.Success
-                : new ValidationResult("The field {0} must be a valid Unix timestamp in seconds " +
-                                       "(between 0 and 2 147 483 647).", ["timestamp"]);
-
+            if (unix is <= 0 or >= MaxUnixSeconds)
+                throw new ArgumentNullException(nameof(timestamp), "The field {0} must be a valid Unix timestamp in seconds " +
+                                                                   "(between 0 and 2 147 483 647).");
             return ValidationResult.Success;
         }
         catch (Exception ex)

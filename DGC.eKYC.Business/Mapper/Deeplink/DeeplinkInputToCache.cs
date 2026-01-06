@@ -18,7 +18,7 @@ public partial class Mapper
             DeeplinkRequestId = deeplinkRequestId,
             OrgId = orgId,
             PhoneNumber = input.PhoneNumber,
-            Timestamp = timestampLong
+            CreatedAt = timestampLong
         };
 
         return cacheDto;

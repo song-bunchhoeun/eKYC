@@ -18,7 +18,7 @@ public class ValidateDeeplinkInputDto : SuperAppSecurityBaseInput
     public string PhoneNumber { get; set; }
 
     [UnixTimeSecondsValidation]
-    public long Timestamp { get; set; }
+    public long CreatedAt { get; set; }
 
     [Required]
     public int OrgId { get; set; }
