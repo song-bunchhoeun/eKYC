@@ -119,7 +119,7 @@ public class DeeplinkService(
                 { "orgId", cacheDto.OrgId.ToString() },
                 { "eKycTransactionId", eKycTransactionId.ToString() }
             };
-            var response = _jwtService.GenerateToken(eKycTransactionId.ToString(), eKycTransactionExpiration, jwtParams);
+            var response = _jwtService.GenerateToken(eKycTransactionId.ToString(), eKycTransactionExpiration,nowTime, jwtParams);
             return new ValidateDeeplinkOutputDto(response, eKycTransactionExpiration, nowTime.Date);
         }
         catch (CustomHttpResponseException ex)

@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DGC.eKYC.Business.DTOs.CustomExceptions;
+using DGC.eKYC.Business.DTOs.Errors;
 
 namespace DGC.eKYC.Business.Services.Jwt;
 
@@ -16,8 +18,9 @@ public class ApiJwtService(IConfiguration config) : IJwtService
 
     private readonly string _issuer = config.GetValue<string>("JwtSettings:Issuer") ?? "DefaultIssuer";
     private readonly string _audience = config.GetValue<string>("JwtSettings:Audience") ?? "DefaultAudience";
+    private const string Scheme = "Bearer";
 
-    public string GenerateToken(string subject, int expiryMinutes, Dictionary<string, string?> additionalClaims)
+    public string GenerateToken(string subject, int expiryMinutes, DateTimeOffset datetime, Dictionary<string, string?> additionalClaims)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -26,7 +29,7 @@ public class ApiJwtService(IConfiguration config) : IJwtService
         {
             new(JwtRegisteredClaimNames.Sub, subject),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            new(JwtRegisteredClaimNames.Iat, datetime.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };
 
         // Dynamically inject additional parameters
@@ -50,12 +53,43 @@ public class ApiJwtService(IConfiguration config) : IJwtService
         return tokenHandler.WriteToken(token);
     }
 
-    public ClaimsPrincipal? GetPrincipalFromToken(string token)
+    /// <summary>
+    /// Validates a token and returns a detailed result with specific failure reasons.
+    /// This method does not log token contents or secrets.
+    /// </summary>
+    public ClaimsPrincipal ValidateToken(string? token)
     {
+        if (string.IsNullOrWhiteSpace(token))
+            throw new CustomHttpResponseException(
+                400,
+                new ErrorResponse(
+                    "bad_request",
+                    "Validation failed for the request.",
+                    [new ErrorDetail("malformed_token", "Token is missing or empty.")]));
+
+        var parts = token.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length != 2 || !parts[0].Equals(Scheme, StringComparison.OrdinalIgnoreCase))
+            throw new CustomHttpResponseException(
+                401,
+                new ErrorResponse(
+                    "bad_request",
+                    "Validation failed for the request.",
+                    [new ErrorDetail(
+                        "bad_authorization_header", 
+                        "Bearer Authorization Header is required for this endpoint")]));
+
+        var cleanedToken = parts[1];
+
         var tokenHandler = new JwtSecurityTokenHandler();
+
+        if (!tokenHandler.CanReadToken(cleanedToken))
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("malformed_token", "Token format is invalid."));
+
         try
         {
-            return tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var principal = tokenHandler.ValidateToken(cleanedToken, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _signingKey,
@@ -66,14 +100,59 @@ public class ApiJwtService(IConfiguration config) : IJwtService
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             }, out _);
+
+            return principal;
         }
-        catch
+        catch (SecurityTokenExpiredException ex)
         {
-            return null;
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("expired_token", ex.Message));
+        }
+        catch (SecurityTokenInvalidIssuerException ex)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("invalid_issuer", ex.Message));
+        }
+        catch (SecurityTokenInvalidAudienceException ex)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("invalid_audience", ex.Message));
+        }
+        catch (Exception ex) 
+            when (ex is SecurityTokenSignatureKeyNotFoundException or SecurityTokenInvalidSignatureException)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("invalid_signature", ex.Message));
+        }
+        catch (SecurityTokenNoExpirationException ex)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("expired_token", ex.Message));
+        }
+        catch (SecurityTokenValidationException ex)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("invalid_token", ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            throw new CustomHttpResponseException(
+                401, 
+                new ErrorResponse("malformed_token", ex.Message));
+        }
+        catch (Exception ex)
+        {
+            throw new CustomHttpResponseException(
+                500, 
+                new ErrorResponse("internal_validation_error", ex.Message));
         }
     }
-
-    public bool IsTokenValid(string token) => GetPrincipalFromToken(token) != null;
 
     /// <summary>
     /// Parses a JWT string to retrieve a claim without requiring a SecretKey.

@@ -6,12 +6,14 @@ namespace DGC.eKYC.Business.Services.Jwt;
 
 public class FunctionJwtService : IJwtService
 {
-    public string GenerateToken(string subject, int expiryMinutes, Dictionary<string, string?> additionalClaims)
+    public string GenerateToken(
+        string subject, 
+        int expiryMinutes, 
+        DateTimeOffset datetime, 
+        Dictionary<string, string?> additionalClaims)
         => throw new NotImplementedException();
 
-    public ClaimsPrincipal? GetPrincipalFromToken(string token) => throw new NotImplementedException();
-
-    public bool IsTokenValid(string token) => throw new NotImplementedException();
+    public ClaimsPrincipal ValidateToken(string? token) => throw new NotImplementedException();
 
     /// <summary>
     /// Parses a JWT string to retrieve a claim without requiring a SecretKey.
