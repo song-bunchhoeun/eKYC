@@ -27,7 +27,9 @@ public class ValidateDeeplinkInputDto : SuperAppSecurityBaseInput
     public string CallBackUrl { get; set; }
 }
 
-public class ValidateDeeplinkOutputDto(string token)
+public class ValidateDeeplinkOutputDto(string token, int expiredInSeconds, DateTime now)
 {
     public string Token { get; set; } = token;
+    public int ExpiresIn { get; set; } = expiredInSeconds;
+    public DateTime ExpiresAt { get; set; } = now.AddSeconds(expiredInSeconds);
 }

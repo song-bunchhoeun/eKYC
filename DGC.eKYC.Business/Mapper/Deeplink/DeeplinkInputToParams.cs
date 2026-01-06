@@ -9,11 +9,12 @@ public partial class Mapper
         string eKycMiniAppId,
         string unixTimestampStr,
         string deeplinkRequestId,
-        int orgId)
+        int orgId,
+        string actionName)
     {
         var queryParams = new Dictionary<string, string?>
         {
-            { "name", "action" },
+            { "name", actionName },
             { "miniappid", eKycMiniAppId },
             { "timestamp", unixTimestampStr },
             { "callbackUrl", input.CallBackUrl },

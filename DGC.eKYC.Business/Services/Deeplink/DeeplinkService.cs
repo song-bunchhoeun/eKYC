@@ -54,7 +54,16 @@ public class DeeplinkService(
         var eKycMiniAppId = _configuration.GetValue<string?>("SuperAppSettings:EKycMiniAppId")
                             ?? throw new ArgumentNullException(nameof(configuration), "missing eKyc miniapp id");
 
-        var queryParams = generateDeeplinkInputInputDto.ToParamDictionary(eKycMiniAppId, timestamp.ToString(), deeplinkIdStr, clientEntity.OrgId);
+        var miniAppActionName = _configuration.GetValue<string?>("SuperAppSettings:MiniAppActionName", "action")
+                            ?? throw new ArgumentNullException(nameof(configuration), "missing eKyc miniapp action name");
+
+        var queryParams = generateDeeplinkInputInputDto.ToParamDictionary(
+            eKycMiniAppId, 
+            timestamp.ToString(), 
+            deeplinkIdStr, 
+            clientEntity.OrgId, 
+            miniAppActionName);
+
         var callbackUrl = QueryHelpers.AddQueryString(superAppRedirectUrl, queryParams);
         var deeplinkExpiration = _configuration.GetValue<int>("EkycSettings:DeeplinkExpirationSeconds");
 
@@ -111,8 +120,7 @@ public class DeeplinkService(
                 { "eKycTransactionId", eKycTransactionId.ToString() }
             };
             var response = _jwtService.GenerateToken(eKycTransactionId.ToString(), eKycTransactionExpiration, jwtParams);
-            return new ValidateDeeplinkOutputDto(response);
-
+            return new ValidateDeeplinkOutputDto(response, eKycTransactionExpiration, nowTime.Date);
         }
         catch (CustomHttpResponseException ex)
         {
