@@ -1,0 +1,54 @@
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (dev, staging, prod)'
+      client_id:
+        required: true
+        type: string
+        description: 'Azure User Assigned Identity Client ID'
+      tenant_id:
+        required: true
+        type: string
+        description: 'Azure Tenant ID'
+      subscription_id:
+        required: true
+        type: string
+        description: 'Azure Subscription ID'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build and Publish
+        run: dotnet publish DGC.eKYC.Api/DGC.eKYC.Api.csproj -c Release -o ./publish
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ inputs.client_id }}
+          tenant-id: ${{ inputs.tenant_id }}
+          subscription-id: ${{ inputs.subscription_id }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          # This variable comes from the GitHub Environment configuration
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+          package: ./publish

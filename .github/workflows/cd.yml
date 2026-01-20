@@ -1,0 +1,56 @@
+name: CD
+
+on:
+  push:
+    branches: [ "master", "uat", "dev" ]
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      git_sha: ${{ steps.vars.outputs.git_sha }}
+    steps:
+      - id: vars
+        run: echo "git_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - id: set-env
+        run: |
+          # Map branches to GitHub Environments
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            ENV_NAME="production"
+          elif [[ "${{ github.ref_name }}" == "uat" ]]; then
+            ENV_NAME="uat"
+          else
+            ENV_NAME="dev"
+          fi
+
+          echo "Determined Environment: $ENV_NAME"
+          echo "environment=$ENV_NAME" >> $GITHUB_OUTPUT
+
+  debug-outputs:
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+    - id: debug-context
+      run: |
+        echo "### Triggering Event"                                 >> $GITHUB_STEP_SUMMARY
+        echo "| Var | Value |"                                      >> $GITHUB_STEP_SUMMARY
+        echo "|:--|:--|"                                            >> $GITHUB_STEP_SUMMARY
+        echo "| event_name      | ${{ github.event_name }} |"       >> $GITHUB_STEP_SUMMARY
+        echo "| ref_name        | ${{ github.ref_name }} |"         >> $GITHUB_STEP_SUMMARY
+
+        echo "### Pipeline Variables"                                         >> $GITHUB_STEP_SUMMARY
+        echo "| Var | Value |"                                                >> $GITHUB_STEP_SUMMARY
+        echo "|:--|:--|"                                                      >> $GITHUB_STEP_SUMMARY
+        echo "| Target Environment | ${{ needs.config.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
+        echo "| Git sha | ${{ needs.config.outputs.git_sha }}"                >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    needs: [config, debug-outputs]
+    uses: ./.github/workflows/_deploy.yaml
+    with:
+      environment: ${{ needs.config.outputs.environment }}
+      client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
