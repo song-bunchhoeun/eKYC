@@ -165,7 +165,7 @@ jobs:
   deploy:
     needs: [config, debug-outputs]
     uses: ./.github/workflows/_deploy.yaml
-    with:
+      with:
       environment: ${{ needs.config.outputs.environment }}
       client_id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant_id: ${{ secrets.AZURE_TENANT_ID }}
