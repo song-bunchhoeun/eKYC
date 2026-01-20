@@ -2,7 +2,7 @@ name: .NET Core CI/CD
 
 on:
   push:
-    branches: [ "main", "master" ] # Triggers on either branch name
+    branches: [ "main", "master" ]
 
 jobs:
   build-and-deploy:
@@ -15,18 +15,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x' # Forces the runner to use .NET 8
+        dotnet-version: '8.0.x'
 
     - name: Restore Dependencies
-      run: dotnet restore
+      # Explicitly point to your .csproj file
+      run: dotnet restore DGC.eKYC.Api/DGC.eKYC.Api.csproj
 
     - name: Build and Publish
-      # Using -o ./publish creates a clean folder for the deployment step
-      run: dotnet publish -c Release -o ./publish
+      # Explicitly point to your .csproj file here as well
+      run: dotnet publish DGC.eKYC.Api/DGC.eKYC.Api.csproj -c Release -o ./publish
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'azureweb' # Change this to your actual Azure App Service name
+        app-name: 'azureweb'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ./publish
