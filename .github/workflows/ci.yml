@@ -20,4 +20,5 @@ jobs:
     - name: Build
       run: dotnet build DGC.eKYC.Api/DGC.eKYC.Api.csproj --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      #run: dotnet test --no-build --verbosity normal
+      run: dotnet test DGC.eKYC.Tests/DGC.eKYC.Tests.csproj --no-build --verbosity normal
