@@ -30,7 +30,7 @@ jobs:
 
     - name: Azure Login
       uses: azure/login@v2
-      with:
+      with: # Using for Service Principal authentication
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.TENANT_ID }}
         subscription-id: ${{ secrets.SUB_ID }}
@@ -39,5 +39,5 @@ jobs:
       uses: azure/webapps-deploy@v3
       with:
         app-name: 'azureweb'
-        # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        # publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} Note: Using publish profile is another way to authenticate as a simpler alternative secret
         package: ./publish
