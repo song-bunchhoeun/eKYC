@@ -64,11 +64,11 @@ jobs:
     #     SUB_ID: ${{ secrets.SUB_ID }}
 
     deploy:
-    needs: [config, debug-outputs]
-    permissions:
-      id-token: write  
-      contents: read
-    uses: ./.github/workflows/_deploy.yml
-    with:
-      environment: uat # This passes 'uat' to the inner workflow
-    secrets: inherit
+      needs: [config, debug-outputs]
+      permissions:
+        id-token: write  
+        contents: read
+      uses: ./.github/workflows/_deploy.yml
+      with:
+        environment: uat # This passes 'uat' to the inner workflow
+      secrets: inherit
