@@ -48,7 +48,6 @@ jobs:
 
   deploy:
     needs: [config, debug-outputs]
-    environment: uat
     permissions:
       id-token: write  
       contents: read
