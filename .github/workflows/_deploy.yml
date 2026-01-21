@@ -7,18 +7,21 @@ on:
         required: true
         type: string
         description: 'Environment to deploy to (dev, staging, prod)'
-    secrets:
-      AZURE_CLIENT_ID:
+    # secrets:
+    #   AZURE_CLIENT_ID:
+      client_id:
         required: true
-        # type: string
+        type: string
         description: 'Azure User Assigned Identity Client ID'
-      TENANT_ID:
+      # TENANT_ID:
+      tenant_id:
         required: true
-        # type: string
+        type: string
         description: 'Azure Tenant ID'
-      SUB_ID:
+      # SUB_ID: 
+      subscription_id:
         required: true
-        # type: string
+        type: string
         description: 'Azure Subscription ID'
 
 permissions:
