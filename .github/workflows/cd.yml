@@ -48,6 +48,9 @@ jobs:
 
   deploy:
     needs: [config, debug-outputs]
+    permissions:
+      id-token: write  
+      contents: read
     uses: ./.github/workflows/_deploy.yml
     with:
       environment: ${{ needs.config.outputs.environment }}
