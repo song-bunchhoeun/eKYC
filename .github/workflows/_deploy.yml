@@ -3,19 +3,22 @@ name: Reusable Deploy
 on:
   workflow_call:
     inputs:
-      client_id:
+      environment:
         required: true
-        type: string
+        # type: string
+        description: 'Environment to deploy to (dev, staging, prod)'
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+        # type: string
         description: 'Azure User Assigned Identity Client ID'
-      # TENANT_ID:
-      tenant_id:
+      TENANT_ID:
         required: true
-        type: string
+        # type: string
         description: 'Azure Tenant ID'
-      # SUB_ID: 
-      subscription_id:
+      SUB_ID:
         required: true
-        type: string
+        # type: string
         description: 'Azure Subscription ID'
 
 permissions:
@@ -25,6 +28,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,9 +43,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ inputs.client_id }}
-          tenant-id: ${{ inputs.tenant_id }}
-          subscription-id: ${{ inputs.subscription_id }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUB_ID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2

@@ -54,11 +54,11 @@ jobs:
     #   contents: read
     uses: ./.github/workflows/_deploy.yml
     with:
-        client_id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant_id: ${{ secrets.TENANT_ID }}
-        subscription_id: ${{ secrets.SUB_ID }}
+        # client_id: ${{ secrets.AZURE_CLIENT_ID }}
+        # tenant_id: ${{ secrets.TENANT_ID }}
+        # subscription_id: ${{ secrets.SUB_ID }}
 
-    # secrets:
-    #   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    #   TENANT_ID: ${{ secrets.TENANT_ID }}
-    #   SUB_ID: ${{ secrets.SUB_ID }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      SUB_ID: ${{ secrets.SUB_ID }}
