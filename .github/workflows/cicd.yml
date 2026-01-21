@@ -2,7 +2,9 @@ name: .NET Core CI/CD
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "uat", "dev" ]
+  pull_request:
+    branches: [ "main", "uat", "dev" ]
 
 permissions:
   id-token: write

@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "main", "uat" ]
+    branches: [ "main", "uat", "dev" ]
 
 jobs:
   config:
@@ -17,7 +17,7 @@ jobs:
       - id: set-env
         run: |
           # Map branches to GitHub Environments
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
             ENV_NAME="production"
           elif [[ "${{ github.ref_name }}" == "uat" ]]; then
             ENV_NAME="uat"
@@ -48,9 +48,13 @@ jobs:
 
   deploy:
     needs: [config, debug-outputs]
-    uses: ./.github/workflows/_deploy.yaml
+    permissions:
+      id-token: write  
+      contents: read
+    uses: ./.github/workflows/_deploy.yml
     with:
       environment: ${{ needs.config.outputs.environment }}
-      client_id: ${{ secrets.AZURE_CLIENT_ID }}
-      tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-      subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      SUB_ID: ${{ secrets.SUB_ID }}
