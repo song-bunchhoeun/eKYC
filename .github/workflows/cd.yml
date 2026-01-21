@@ -48,7 +48,7 @@ jobs:
 
   deploy:
     needs: [config, debug-outputs]
-    uses: /.github/workflows/_deploy.yml
+    uses: ./.github/workflows/_deploy.yml
     with:
       environment: ${{ needs.config.outputs.environment }}
       # client_id: ${{ secrets.AZURE_CLIENT_ID }}
