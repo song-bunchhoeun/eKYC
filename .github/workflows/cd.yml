@@ -18,7 +18,7 @@ jobs:
         run: |
           # Map branches to GitHub Environments
           if [[ "${{ github.ref_name }}" == "main" ]]; then
-            ENV_NAME="production"
+            ENV_NAME="uat"
           elif [[ "${{ github.ref_name }}" == "uat" ]]; then
             ENV_NAME="uat"
           else
