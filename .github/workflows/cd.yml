@@ -46,19 +46,29 @@ jobs:
         echo "| Target Environment | ${{ needs.config.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
         echo "| Git sha | ${{ needs.config.outputs.git_sha }}"                >> $GITHUB_STEP_SUMMARY
 
-  deploy:
+    # deploy:
+    #   needs: [config, debug-outputs]
+    #   permissions:
+    #     id-token: write  
+    #     contents: read
+    #   uses: ./.github/workflows/_deploy.yml
+    #   with:
+    #     environment: ${{ needs.config.outputs.environment }}
+    #     # client_id: ${{ secrets.AZURE_CLIENT_ID }}
+    #     # tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+    #     # subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    #   secrets:
+    #     AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    #     TENANT_ID: ${{ secrets.TENANT_ID }}
+    #     SUB_ID: ${{ secrets.SUB_ID }}
+
+    deploy:
     needs: [config, debug-outputs]
     permissions:
       id-token: write  
       contents: read
     uses: ./.github/workflows/_deploy.yml
     with:
-      environment: ${{ needs.config.outputs.environment }}
-      # client_id: ${{ secrets.AZURE_CLIENT_ID }}
-      # tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-      # subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    secrets:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      TENANT_ID: ${{ secrets.TENANT_ID }}
-      SUB_ID: ${{ secrets.SUB_ID }}
+      environment: uat # This passes 'uat' to the inner workflow
+    secrets: inherit
