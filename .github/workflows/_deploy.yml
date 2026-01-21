@@ -5,7 +5,7 @@ on:
     inputs:
       environment:
         required: true
-        # type: string
+        type: string
         description: 'Environment to deploy to (dev, staging, prod)'
     secrets:
       AZURE_CLIENT_ID:
