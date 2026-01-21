@@ -70,5 +70,5 @@ jobs:
         contents: read
       uses: ./.github/workflows/_deploy.yml
       with:
-        environment: uat # This passes 'uat' to the inner workflow
+        environment: uat # This passes 'uat' to the inner workfloww
       secrets: inherit
