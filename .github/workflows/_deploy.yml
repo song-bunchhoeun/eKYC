@@ -52,5 +52,5 @@ jobs:
         with:
           # This variable comes from the GitHub Environment configuration
           # app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          app-name:'azureweb'
+          app-name: 'azureweb'
           package: ./publish
