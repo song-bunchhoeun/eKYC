@@ -48,12 +48,12 @@ jobs:
 
   deploy:
     needs: [config, debug-outputs]
+    environment: ${{ needs.config.outputs.environment }}
     # permissions:
     #   id-token: write  
     #   contents: read
     uses: ./.github/workflows/_deploy.yml
     with:
-        environment: ${{ needs.config.outputs.environment }}
         client_id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant_id: ${{ secrets.TENANT_ID }}
         subscription_id: ${{ secrets.SUB_ID }}

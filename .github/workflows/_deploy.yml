@@ -3,12 +3,6 @@ name: Reusable Deploy
 on:
   workflow_call:
     inputs:
-      environment:
-        required: true
-        type: string
-        description: 'Environment to deploy to (dev, staging, prod)'
-    # secrets:
-    #   AZURE_CLIENT_ID:
       client_id:
         required: true
         type: string
@@ -31,7 +25,6 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
 
