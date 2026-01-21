@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main", "uat" ]
 
 jobs:
   config:
@@ -17,7 +17,7 @@ jobs:
       - id: set-env
         run: |
           # Map branches to GitHub Environments
-          if [[ "${{ github.ref_name }}" == "master" ]]; then
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
             ENV_NAME="production"
           elif [[ "${{ github.ref_name }}" == "uat" ]]; then
             ENV_NAME="uat"
