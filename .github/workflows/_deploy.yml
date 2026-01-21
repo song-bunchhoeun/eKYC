@@ -51,6 +51,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           # This variable comes from the GitHub Environment configuration
-          # app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          app-name: 'azureweb'
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+          # app-name: 'azureweb'
           package: ./publish
