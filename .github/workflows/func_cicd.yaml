@@ -7,37 +7,32 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: func4demo
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'               
   DOTNET_VERSION: '8.0'
-
+  PROJECT_PATH: DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj
+  PUBLISH_DIR: ./publish
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout source code
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      # Restore NuGet packages
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      # Build project
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
 
-      # Publish Azure Function
       - name: Publish
-        run: dotnet publish --configuration Release --output ${{ env.PUBLISH_DIR }}
-      # Login to Azure using Service Principal
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ${{ env.PUBLISH_DIR }}
+
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -45,8 +40,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUB_ID }}
 
-      # Deploy to Azure Function App
-      - name: Deploy Azure Function App
+      - name: Deploy
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
