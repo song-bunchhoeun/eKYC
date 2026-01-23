@@ -3,7 +3,7 @@ name: Reusable Deploy
 on:
   workflow_call:
     inputs:
-      environment:
+      target_env:
         required: true
         type: string
         description: 'Environment to deploy to (dev, staging, prod)'
@@ -30,7 +30,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.target_env }}
     steps:
       - uses: actions/checkout@v4
 
