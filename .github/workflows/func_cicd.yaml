@@ -9,7 +9,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: func4demo
   DOTNET_VERSION: '8.0'
   PUBLISH_DIR: ./publish
-  SOLUTION_NAME: eKYC.sln
+  SOLUTION_FILE: eKYC.sln
 
 jobs:
   build-and-deploy:
@@ -28,16 +28,15 @@ jobs:
 
       # Restore NuGet packages
       - name: Restore
-        run: dotnet restore ${{ env.SOLUTION_NAME }}
+        run: dotnet restore ${{ env.SOLUTION_FILE }}
 
       # Build project
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
 
       # Publish Azure Function
       - name: Publish
-        run: dotnet publish --configuration Release --output ${{ env.PUBLISH_DIR }}
-
+        run: dotnet publish ${{ env.SOLUTION_FILE }} --configuration Release --output ${{ env.PUBLISH_DIR }}
       # Login to Azure using Service Principal
       - name: Azure Login
         uses: azure/login@v2
