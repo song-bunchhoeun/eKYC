@@ -2,9 +2,9 @@ name: CI Web App
 
 on:
   push:
-    branches: [ "main", "master", "uat", "dev" ]
+    branches: [ "main", "uat", "dev" ]
   pull_request:
-    branches: [ "main", "master", "uat", "dev" ]
+    branches: [ "main", "uat", "dev" ]
 
 jobs:
   build:
@@ -16,6 +16,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore 
+      run: dotnet restore DGC.eKYC.Api/DGC.eKYC.Api.csproj
     - name: Build
-      run: dotnet build  --no-restore
+      run: dotnet build DGC.eKYC.Api/DGC.eKYC.Api.csproj --no-restore
