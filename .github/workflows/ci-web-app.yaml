@@ -1,16 +1,10 @@
-name: CI
+name: CI Web App
 
 on:
   push:
     branches: [ "main", "master", "uat", "dev" ]
   pull_request:
     branches: [ "main", "master", "uat", "dev" ]
-
-env:
-  AZURE_FUNCTIONAPP_NAME: func-ekyc-4demo
-  DOTNET_VERSION: '8.0'
-  PROJECT_PATH: DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj
-  PUBLISH_DIR: ./publish
 
 jobs:
   build:

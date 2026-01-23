@@ -1,0 +1,38 @@
+name: Build and Deploy Azure Function App
+
+on:
+  push:
+    branches:
+      - [ "uat", "dev", "main" ]
+
+env:
+  AZURE_FUNCTIONAPP_NAME: func-ekyc-4demo
+  DOTNET_VERSION: '8.0'
+  PROJECT_PATH: DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj
+  PUBLISH_DIR: ./publish
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+
+      - name: Publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ${{ env.PUBLISH_DIR }}
