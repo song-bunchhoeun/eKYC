@@ -32,6 +32,9 @@ jobs:
 
   debug-outputs:
     needs: config
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     steps:
     - id: debug-context

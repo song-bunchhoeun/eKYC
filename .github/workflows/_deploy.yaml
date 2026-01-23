@@ -47,10 +47,12 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUB_ID }}
 
+ # ================= WEB APP =================
       - name: Build and Publish
-        if: ${{ inputs.environment == 'webapp' }}
+        if: ${{ inputs.app_type == 'webapp' }}
         run: dotnet publish DGC.eKYC.Api/DGC.eKYC.Api.csproj -c Release -o ./publish
 
+# ================= FUNCTION APP =================
       - name: Build and Publish
         if: ${{ inputs.app_type == 'functionapp' }}
         run: dotnet publish DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj -c Release -o ./publish
@@ -64,6 +66,6 @@ jobs:
       - name: Deploy to Azure Function App
         uses: azure/functions-action@v1
         with:
-          # app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
-          app-name: func-ekyc-4demo
+          app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+          # app-name: func-ekyc-4demo
           package: ./publish
