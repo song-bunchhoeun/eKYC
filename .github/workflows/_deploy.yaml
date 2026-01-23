@@ -8,8 +8,8 @@ on:
         type: string
         description: 'Environment to deploy to (dev, staging, prod)'
 
-      environment:
-        required: true
+      app_type:
+        required: false
         type: string
         description: 'Environment to deploy to (webapp, functionapp)'
     secrets:
@@ -52,7 +52,7 @@ jobs:
         run: dotnet publish DGC.eKYC.Api/DGC.eKYC.Api.csproj -c Release -o ./publish
 
       - name: Build and Publish
-        if: ${{ inputs.environment == 'functionapp' }}
+        if: ${{ inputs.app_type == 'functionapp' }}
         run: dotnet publish DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj -c Release -o ./publish
 
       - name: Deploy to Azure Web App
