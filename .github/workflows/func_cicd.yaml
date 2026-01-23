@@ -3,7 +3,7 @@ name: Build and Deploy Function App
 on:
   push:
     branches:
-      - dev 
+      - uat
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'func4demo'   
