@@ -16,6 +16,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore DGC.eKYC.Api/DGC.eKYC.Api.csproj
+      run: dotnet restore
     - name: Build
-      run: dotnet build DGC.eKYC.Api/DGC.eKYC.Api.csproj --no-restore
+      run: dotnet build  --no-restore
