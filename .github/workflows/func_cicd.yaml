@@ -1,4 +1,4 @@
-name: Build and Deploy Function App
+name: Build and Deploy Azure Function App (.NET 8)
 
 on:
   push:
@@ -7,27 +7,37 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: func4demo
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: .
-  NODE_VERSION: '18'
+  DOTNET_VERSION: '8.0'
+  PUBLISH_DIR: ./publish
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install dependencies
-        run: npm install
+      # Restore NuGet packages
+      - name: Restore
+        run: dotnet restore
 
+      # Build project
       - name: Build
-        run: npm run build --if-present
+        run: dotnet build --configuration Release --no-restore
 
+      # Publish Azure Function
+      - name: Publish
+        run: dotnet publish --configuration Release --output ${{ env.PUBLISH_DIR }}
+
+      # Login to Azure using Service Principal
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -35,8 +45,9 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUB_ID }}
 
-      - name: Deploy to Azure Function App
+      # Deploy to Azure Function App
+      - name: Deploy Azure Function App
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: ${{ env.PUBLISH_DIR }}
