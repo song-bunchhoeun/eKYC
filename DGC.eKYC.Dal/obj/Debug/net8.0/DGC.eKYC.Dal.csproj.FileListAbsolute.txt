@@ -1,0 +1,13 @@
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Deeplink/bin/output/DGC.eKYC.Dal.deps.json
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Deeplink/bin/output/DGC.eKYC.Dal.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Deeplink/bin/output/DGC.eKYC.Dal.pdb
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.csproj.AssemblyReference.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.GeneratedMSBuildEditorConfig.editorconfig
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.AssemblyInfoInputs.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.AssemblyInfo.cs
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.csproj.CoreCompileInputs.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.sourcelink.json
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/refint/DGC.eKYC.Dal.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/DGC.eKYC.Dal.pdb
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Dal/obj/Debug/net8.0/ref/DGC.eKYC.Dal.dll

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DGC.eKYC.Dal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2c9ef1463c33740f42070c285824e2646a22179")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+86919bdb945be2b07158151eb33b6a031e482ece")]
 [assembly: System.Reflection.AssemblyProductAttribute("DGC.eKYC.Dal")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DGC.eKYC.Dal")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

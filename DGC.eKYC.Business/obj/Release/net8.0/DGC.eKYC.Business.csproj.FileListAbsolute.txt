@@ -1,0 +1,16 @@
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/bin/Release/net8.0/DGC.eKYC.Business.deps.json
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/bin/Release/net8.0/DGC.eKYC.Business.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/bin/Release/net8.0/DGC.eKYC.Business.pdb
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/bin/Release/net8.0/DGC.eKYC.Dal.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/bin/Release/net8.0/DGC.eKYC.Dal.pdb
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.csproj.AssemblyReference.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.GeneratedMSBuildEditorConfig.editorconfig
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.AssemblyInfoInputs.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.AssemblyInfo.cs
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.csproj.CoreCompileInputs.cache
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.sourcelink.json
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.3D71A4F2.Up2Date
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/refint/DGC.eKYC.Business.dll
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/DGC.eKYC.Business.pdb
+/Users/songbunchhoeun/Desktop/Azure/func.eKYC.api/DGC.eKYC.Business/obj/Release/net8.0/ref/DGC.eKYC.Business.dll
