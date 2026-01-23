@@ -9,6 +9,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: func4demo
   DOTNET_VERSION: '8.0'
   PUBLISH_DIR: ./publish
+  SOLUTION_NAME; eKYC.sln
 
 jobs:
   build-and-deploy:
@@ -27,7 +28,7 @@ jobs:
 
       # Restore NuGet packages
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ${{ env.SOLUTION_NAME }}
 
       # Build project
       - name: Build
