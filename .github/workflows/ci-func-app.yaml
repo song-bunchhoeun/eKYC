@@ -2,8 +2,9 @@ name: Build and Deploy Azure Function App
 
 on:
   push:
-    branches:
-      - [ "uat", "dev", "main" ]
+    branches: [ "main", "uat", "dev" ]
+  pull_request:
+    branches: [ "main", "uat", "dev" ]
 
 env:
   AZURE_FUNCTIONAPP_NAME: func-ekyc-4demo
