@@ -9,9 +9,9 @@ on:
         description: 'Environment to deploy to (dev, staging, prod)'
 
       app_type:
-        required: false
+        required: true
         type: string
-        description: 'Environment to deploy to (webapp, functionapp)'
+        description: app_type to deploy to (webapp, functionapp)'
     secrets:
       AZURE_CLIENT_ID:
         required: true
