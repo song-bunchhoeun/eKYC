@@ -4,7 +4,6 @@ on:
   workflow_call:
     inputs:
       environment:
-      # environment:
         required: true
         type: string
         description: 'Environment to deploy to (dev, staging, prod)'
@@ -70,5 +69,4 @@ jobs:
         uses: azure/functions-action@v1
         with:
           app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
-          # app-name: func-ekyc-4demo
           package: ./publish
