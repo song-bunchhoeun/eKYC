@@ -49,12 +49,12 @@ jobs:
           subscription-id: ${{ secrets.SUB_ID }}
 
  # ================= WEB APP =================
-      - name: Build and Publish
+      - name: deploy webapp
         if: ${{ inputs.app_type == 'webapp' }}
         run: dotnet publish DGC.eKYC.Api/DGC.eKYC.Api.csproj -c Release -o ./publish
 
 # ================= FUNCTION APP =================
-      - name: Build and Publish
+      - name: deploy functionapp
         if: ${{ inputs.app_type == 'functionapp' }}
         run: dotnet publish DGC.eKYC.Deeplink/DGC.eKYC.Deeplink.csproj -c Release -o ./publish
 
