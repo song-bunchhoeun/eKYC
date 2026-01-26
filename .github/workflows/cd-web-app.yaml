@@ -55,7 +55,7 @@ jobs:
       contents: read
     uses: ./.github/workflows/_deploy.yaml
     with:
-      environment: ${{ needs.config.outputs.environment }}
+      target_env: ${{ needs.config.outputs.environment }}
       app_type: webapp
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
